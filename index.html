@@ -126,7 +126,7 @@ const fmtr=new Intl.DateTimeFormat('en-US',{timeZone:TZ,hourCycle:'h23',year:'nu
 function cairo(date){const o={};fmtr.formatToParts(date||new Date()).forEach(p=>o[p.type]=p.value);return{y:+o.year,m:+o.month,d:+o.day,day:WD[o.weekday],sec:(+o.hour%24)*3600+ +o.minute*60+ +o.second}}
 function nowSec(){return cairo().sec}
 function tzOff(date){const c=cairo(date);return Math.round((Date.UTC(c.y,c.m-1,c.d)+c.sec*1000-date.getTime())/3600000)}
-const LAT=31.2,LNG=29.95,R=Math.PI/180,sn=a=>Math.sin(a*R),cs=a=>Math.cos(a*R),tn=a=>Math.tan(a*R),asn=x=>Math.asin(x)/R,acs=x=>Math.acos(x)/R,fix=(a,b)=>a-b*Math.floor(a/b);
+const LAT=30.59,LNG=31.5,R=Math.PI/180,sn=a=>Math.sin(a*R),cs=a=>Math.cos(a*R),tn=a=>Math.tan(a*R),asn=x=>Math.asin(x)/R,acs=x=>Math.acos(x)/R,fix=(a,b)=>a-b*Math.floor(a/b);
 function prayers(c){
  const tz=tzOff(new Date(Date.UTC(c.y,c.m-1,c.d,12))),D=Date.UTC(c.y,c.m-1,c.d,12)/864e5+2440587.5-2451545;
  const g=fix(357.529+.98560028*D,360),q=fix(280.459+.98564736*D,360),L=fix(q+1.915*sn(g)+.02*sn(2*g),360),e=23.439-.00000036*D;
@@ -152,7 +152,7 @@ function prayCard(n,c,sec){
  const p=pt(c);let nx=PN.find(([k])=>p[k]>sec),nT;
  if(nx)nT=p[nx[0]];else{const t=new Date(Date.UTC(c.y,c.m-1,c.d+1,12));nx=PN[0];nT=pt({y:t.getUTCFullYear(),m:t.getUTCMonth()+1,d:t.getUTCDate()}).fajr+86400}
  nextP={t:nT};
- $('pray').innerHTML=`<small>مواعيد الصلاة، الإسكندرية (حساب تقريبي)</small><div class="nm">${nx[1]} بعد <span id="pcd" style="direction:ltr;display:inline-block"></span></div>`+
+ $('pray').innerHTML=`<small>مواعيد الصلاة، الشرقية (حساب تقريبي)</small><div class="nm">${nx[1]} بعد <span id="pcd" style="direction:ltr;display:inline-block"></span></div>`+
  PN.map(([k,nm])=>`<div class="pr ${nx[0]===k?'nx':''}"><span>${nm}</span><span class="t">${fmt(Math.round(p[k]/60))}</span><label><input type="checkbox" data-p="${k}" ${pon[k]!==false?'checked':''}> تنبيه</label></div>`).join('')+
  `<div class="sm">الشروق ${fmt(Math.round(p.sunrise/60))}</div><div class="row" style="margin-top:8px"><button class="btn alt" id="tadh">جرّب الأذان</button></div><div class="sm" id="dst">${dstInfo(n,c)}</div>`}
 $('pray').addEventListener('change',e=>{const t=e.target;
